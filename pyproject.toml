@@ -7,54 +7,53 @@ name = "starvector"
 version = "1.0"
 description = "Generating Scalable Vector Graphics Code from Images and Text"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
-    "torch==2.5.1", 
-    "torchvision==0.20.1",
-    "transformers==4.49.0", 
-    "tokenizers==0.21.1", 
-    "sentencepiece==0.2.0",    
+    "torch==2.6.0",
+    "torchvision==0.21.0",
+    "transformers==4.49.0",
+    "tokenizers==0.21.1",
+    "sentencepiece==0.2.0",
     "accelerate",
-    "pydantic==2.10", 
-    "markdown2[all]", 
-    "numpy<2.0.0", 
+    "pydantic==2.10",
+    "markdown2[all]",
+    "numpy<2.0.0",
     "scikit-learn==1.2.2",
-    "gradio==3.36.1", 
+    "gradio==3.36.1",
     "gradio_client==0.2.9",
-    "requests", 
-    "httpx==0.24.0", 
-    "uvicorn", 
+    "requests",
+    "httpx==0.24.0",
+    "uvicorn",
     "fastapi",
-    "svgpathtools==1.6.1", 
+    "svgpathtools==1.6.1",
     "seaborn==0.12.2",
-    "taming-transformers", 
-    "lpips", 
-    "cairosvg", 
-    "beautifulsoup4", 
-    "webcolors", 
+    "taming-transformers",
+    "lpips",
+    "cairosvg",
+    "beautifulsoup4",
+    "webcolors",
     "tqdm",
-    "omegaconf", 
-    "open-clip-torch", 
-    "noise", 
-    "datasets", 
-    "scikit-image", 
-    "fairscale", 
-    "lxml", 
-    "torch-fidelity", 
+    "omegaconf",
+    "open-clip-torch",
+    "noise",
+    "datasets",
+    "scikit-image",
+    "fairscale",
+    "lxml",
+    "torch-fidelity",
     "clip-openai",
-    "scipy==1.11.1",
+    "scipy==1.16.1",
     "sentence-transformers",
     "reportlab",
     "svglib",
     "Pillow",
     "protobuf",
     "openai",
-    "flash_attn==2.7.3"
-
+    "deepspeed>=0.17.6",
 ]
 
 [project.optional-dependencies]
@@ -69,3 +68,60 @@ exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", 
 
 [tool.wheel]
 exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }]
+
+[tool.uv.extra-build-variables]
+flash-attn = { FLASH_ATTENTION_SKIP_CUDA_BUILD = "TRUE" }
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu124"},
+]
+torchvision = [
+    { index = "pytorch-cu124"},
+]
+
+#[[tool.uv.index]]
+#url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+#default = true
+
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+# url = "https://mirrors.nju.edu.cn/pytorch/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+#url = "https://download.pytorch.org/whl/cu124"
+url = "https://mirrors.nju.edu.cn/pytorch/whl/cu124"
+explicit = true
+
+[dependency-groups]
+dev = [
+    { include-group = "lint" },
+    { include-group = "format" },
+    "ipykernel>=6.30.1",
+]
+lint = ["ruff"]
+format = ["black", "isort"]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+line_length = 88
+py_version = 311
+extra_standard_library = ["typing_extensions"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+
