@@ -14,23 +14,23 @@ classifiers = [
 ]
 dependencies = [
     "torch==2.6.0",
-    "torchvision==0.21.0",
-    "transformers==4.49.0",
-    "tokenizers==0.21.1",
-    "sentencepiece==0.2.0",
+    "torchvision",
+    "transformers>=4.49.0",
+    "tokenizers>=0.21.1",
+    "sentencepiece>=0.2.0",
     "accelerate",
-    "pydantic==2.10",
+    "pydantic>=2.10",
     "markdown2[all]",
     "numpy<2.0.0",
-    "scikit-learn==1.2.2",
+    "scikit-learn>=1.2.2",
     "gradio==3.36.1",
     "gradio_client==0.2.9",
     "requests",
     "httpx==0.24.0",
     "uvicorn",
     "fastapi",
-    "svgpathtools==1.6.1",
-    "seaborn==0.12.2",
+    "svgpathtools>=1.6.1",
+    "seaborn",
     "taming-transformers",
     "lpips",
     "cairosvg",
@@ -46,18 +46,21 @@ dependencies = [
     "lxml",
     "torch-fidelity",
     "clip-openai",
-    "scipy==1.16.1",
+    "scipy",
     "sentence-transformers",
     "reportlab",
     "svglib",
     "Pillow",
     "protobuf",
     "openai",
-    "deepspeed>=0.17.6",
+    "ninja",
+    "wandb",
+    "peft>=0.17.1",
+    "aspose-pdf>=25.8.0",
+    "pandas>=2.3.2",
+    "pyarrow>=21.0.0",
+    "pandas-stubs==2.3.2.250926",
 ]
-
-[project.optional-dependencies]
-train = ["deepspeed", "ninja", "wandb"]
 
 [project.urls]
 "Homepage" = "https://starvector.github.io"
@@ -83,15 +86,21 @@ torchvision = [
     { index = "pytorch-cu124"},
 ]
 
-#[[tool.uv.index]]
-#url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-#default = true
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
+
+[[tool.uv.index]]
+name = "pytorch-cu129"
+url = "https://download.pytorch.org/whl/cu129"
+# url = "https://mirrors.nju.edu.cn/pytorch/whl/cu128"
+explicit = true
 
 
 [[tool.uv.index]]
 name = "pytorch-cu128"
-url = "https://download.pytorch.org/whl/cu128"
-# url = "https://mirrors.nju.edu.cn/pytorch/whl/cu128"
+#url = "https://download.pytorch.org/whl/cu128"
+url = "https://mirrors.nju.edu.cn/pytorch/whl/cu128"
 explicit = true
 
 [[tool.uv.index]]
