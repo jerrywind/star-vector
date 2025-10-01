@@ -1,7 +1,6 @@
 from torchvision.transforms import ToTensor
 import torch.nn.functional as F
 from starvector.metrics.base_metric import BaseMetric
-import torch
 
 class L2DistanceCalculator(BaseMetric): 
     def __init__(self, config=None, masked_l2=False):

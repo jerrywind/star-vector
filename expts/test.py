@@ -1,10 +1,9 @@
 from PIL import Image
-from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
+from transformers import AutoModelForCausalLM
 from starvector.data.util import process_and_rasterize_svg
 import torch
 import time
 
-import sys
 import os
 
 model_name = "starvector/starvector-8b-im2svg"

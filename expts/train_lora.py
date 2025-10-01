@@ -1,3 +1,4 @@
+from peft import LoraConfig, TaskType, get_peft_model
 import os
 from starvector.util import (
     set_env_vars,
@@ -8,14 +9,13 @@ from starvector.util import (
     get_last_checkpoint,
     model_summary_table,
     copy_code,
-)
+    )
 # set_env_vars()
 from starvector.train.util import (
     save_checkpoint,
     get_optimizer,
     init_distributed_mode,
     setup_train_env_variables,
-    load_fsdp_plugin,
     apply_gradient_checkpointing,
 )
 import logging
@@ -27,20 +27,18 @@ from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration
 from tqdm.auto import tqdm
 from omegaconf import OmegaConf
-import os
 import time
 from starvector.metrics.util import AverageMeter
-from util import save_checkpoint, get_optimizer
 from starvector.util import get_output_dir
-from starvector.model.builder import model_builder
-from safetensors.torch import load_file as load_safetensors
 from starvector.util import get_config
 import torch
+from transformers import AutoModelForCausalLM
 
-from starvector.train.util import load_checkpoint, is_deepspeed, consolidate_deepspeed_checkpoint
+"""
+Modified via starvector.train.train
+"""
 
 logger = get_logger(__name__, log_level="INFO")
-
 
 def validate(model, dataloader, accelerator):
     loss_meter = AverageMeter()
@@ -65,7 +63,6 @@ def validate(model, dataloader, accelerator):
 
     return val_loss
 
-
 def main(config=None):
     print(f"Experiment config: {config}")
     set_env_vars()
@@ -73,15 +70,14 @@ def main(config=None):
     exp_id = get_exp_id(config)
     output_dir = get_output_dir()
     logging_dir = os.path.join(output_dir, config.data.train.params.dataset_name, exp_id)
-
+    # logs
     if os.path.exists(logging_dir) and not config.training.resume_from_checkpoint:
         config.training.resume_from_checkpoint = get_last_checkpoint(logging_dir)
         config.training.continue_training = True
 
-        # Flatten config dict for logging it
+    # Flatten config dict for logging it
     log_config = flatten_dict(OmegaConf.to_container(config, resolve=True))
     log_config['logging_dir'] = logging_dir  # Add logging dir to config
-
     if config.fsdp.enable:
         init_distributed_mode(config)
         setup_train_env_variables(config)
@@ -96,42 +92,25 @@ def main(config=None):
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / config.training.gradient_accumulation_steps)
     max_train_steps = config.training.n_epochs * num_update_steps_per_epoch
 
+    # model
+    device = torch.accelerator.current_accelerator().type if hasattr(torch, "accelerator") else "cuda"
+    model_name = "starvector/starvector-8b-im2svg"
+    model_ori = AutoModelForCausalLM.from_pretrained(model_name, device_map=device)
+    peft_config = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        task_type=TaskType.CAUSAL_LM,
+        # target_modules=["q_proj", "v_proj", ...]  # optionally indicate target modules
+    )
+    model = get_peft_model(model_ori, peft_config)
+    model.print_trainable_parameters()
+    # training
     global_step = 0
     first_epoch = 0
-
-    model = model_builder(config)
-
-    # Instantiate the model, fsdp and accelerator
-    if config.training.resume_from_checkpoint:
-        if not config.fsdp.enable:
-            if is_deepspeed(config.training.resume_from_checkpoint):
-                if accelerator.is_main_process:
-                    consolidate_deepspeed_checkpoint(config.training.resume_from_checkpoint)
-                accelerator.wait_for_everyone()
-            model = load_checkpoint(model, config.training.resume_from_checkpoint)
-        else:
-            model.load_state_dict(
-                torch.load(os.path.join(config.training.resume_from_checkpoint, "pytorch_model_fsdp.bin")),
-                strict=False)
-        if config.training.continue_training:
-            global_step = int(os.path.basename(config.training.resume_from_checkpoint).split("-")[1])
-            resume_global_step = global_step * config.training.gradient_accumulation_steps
-            first_epoch = global_step // num_update_steps_per_epoch
-            resume_step = resume_global_step % (
-                        num_update_steps_per_epoch * config.training.gradient_accumulation_steps)
-        else:
-            global_step = 0
-            first_epoch = 0
-            resume_step = 0
-            print("Loaded checkpoint but not updating global step")
-
-    if config.fsdp.enable:
-        fsdp_plugin = load_fsdp_plugin(config, model)
-    else:
-        fsdp_plugin = None
-
-    # Define accelerator
+    resume_step = 0
+    fsdp_plugin = None
     kwargs_handler = None
+
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
         mixed_precision=config.training.model_precision,
@@ -178,6 +157,7 @@ def main(config=None):
         wandb.log({"num_update_steps_per_epoch": num_update_steps_per_epoch})
         wandb.log({"max_train_steps": max_train_steps})
 
+    # pass
     # accelerate prepare model
     model = accelerator.prepare(model)
 
@@ -237,7 +217,7 @@ def main(config=None):
     # --------------- Training loop ---------------
     total_steps = num_update_steps_per_epoch * config.training.n_epochs
     progress_bar = tqdm(total=total_steps, disable=not accelerator.is_local_main_process)
-    progress_bar.set_description(f"Training Progress")
+    progress_bar.set_description("Training Progress")
 
     for epoch in range(config.training.n_epochs):
         model.train()
@@ -278,7 +258,6 @@ def main(config=None):
             accelerator.log(logs, step=global_step)
 
     accelerator.end_training()
-
 
 if __name__ == "__main__":
     main(config=get_config())

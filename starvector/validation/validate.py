@@ -1,8 +1,6 @@
 
 
 from omegaconf import OmegaConf
-import os
-from huggingface_hub import login
 from starvector.validation.svg_validator_base import validator_registry
 
 def get_validator(validator_name, config):

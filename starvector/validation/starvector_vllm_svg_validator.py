@@ -1,8 +1,7 @@
 # vllm https://docs.vllm.ai/en/v0.5.5/dev/sampling_params.html
 
 from .svg_validator_base import SVGValidator, register_validator
-from starvector.data.util import rasterize_svg, clean_svg, use_placeholder
-from svgpathtools import svgstr2paths
+from starvector.data.util import rasterize_svg
 from vllm import LLM, SamplingParams
 from datasets import load_dataset
 from torch.utils.data import DataLoader

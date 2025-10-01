@@ -27,13 +27,11 @@ from accelerate.logging import get_logger
 from accelerate.utils import ProjectConfiguration
 from tqdm.auto import tqdm
 from omegaconf import OmegaConf
-import os
 import time
 from starvector.metrics.util import AverageMeter
 from util import save_checkpoint, get_optimizer
 from starvector.util import get_output_dir
 from starvector.model.builder import model_builder
-from safetensors.torch import load_file as load_safetensors
 from starvector.util import get_config
 import torch
 
@@ -229,7 +227,7 @@ def main(config=None):
     # --------------- Training loop ---------------
     total_steps = num_update_steps_per_epoch * config.training.n_epochs
     progress_bar = tqdm(total=total_steps, disable=not accelerator.is_local_main_process)
-    progress_bar.set_description(f"Training Progress")
+    progress_bar.set_description("Training Progress")
 
     for epoch in range(config.training.n_epochs):
         model.train()

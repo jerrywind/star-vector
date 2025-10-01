@@ -1,4 +1,3 @@
-import os
 from starvector.data.base import SVGDatasetBase
 from starvector.data.augmentation import SVGTransforms
 from starvector.data.util import ImageTrainProcessor

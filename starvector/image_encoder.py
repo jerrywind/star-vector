@@ -1,7 +1,6 @@
 import os
 import torch
 import torch.nn as nn
-import os
 from omegaconf import OmegaConf
 from starvector.model.image_encoder.clip_model import convert_weights_to_precision
 from starvector.data.util import ImageTrainProcessor

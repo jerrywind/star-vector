@@ -1,14 +1,12 @@
 import os
 import torch
 import transformers
-import os
 from starvector.util import checkpoint_key
 import glob
 import shutil
 import builtins
 import datetime
 from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig, FullStateDictConfig
-from torch.distributed.fsdp.wrap import transformer_auto_wrap_policy
 from torch.distributed.fsdp import (
     MixedPrecision,
     ShardingStrategy,
@@ -78,11 +76,6 @@ def load_checkpoint(model, checkpoint_dir):
 
     return model
 
-from transformers import (
-    AutoConfig, 
-    AutoModelForCausalLM
-)
-from starvector.model.starvector_arch import StarVectorConfig, StarVectorForCausalLM
 
 def push_model_to_hub(model, new_model_name, tokenizer, processor):
     # Register the model for HF

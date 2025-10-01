@@ -1,7 +1,5 @@
 import torch
-from torch.utils.data import DataLoader
 from starvector.metrics.base_metric import BaseMetric
-from tqdm import tqdm
 from transformers import AutoModel, AutoImageProcessor
 from PIL import Image
 import torch.nn as nn

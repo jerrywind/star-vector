@@ -1,7 +1,4 @@
-from torchvision.transforms import ToTensor
-import torch.nn.functional as F
 from starvector.metrics.base_metric import BaseMetric
-import torch
 from torchmetrics.multimodal.clip_score import CLIPScore
 from torch.utils.data import DataLoader
 from tqdm import tqdm

@@ -1,7 +1,7 @@
 # hf https://huggingface.co/docs/transformers/main_classes/text_generation
 from starvector.validation.svg_validator_base import SVGValidator, register_validator
 import torch
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import AutoModelForCausalLM
 from torch.utils.data import Dataset, DataLoader
 from datasets import load_dataset
 from starvector.data.util import rasterize_svg

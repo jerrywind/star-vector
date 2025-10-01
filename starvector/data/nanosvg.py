@@ -1,4 +1,3 @@
-import os
 from starvector.data.base import SVGDatasetBase
 
 

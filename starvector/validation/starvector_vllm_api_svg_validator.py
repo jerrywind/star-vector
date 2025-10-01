@@ -2,12 +2,8 @@
 # TODO: This is not maintained, need to update it to use the new VLLM API
 
 from .svg_validator_base import SVGValidator, register_validator
-from starvector.data.util import rasterize_svg, clean_svg, use_placeholder
+from starvector.data.util import rasterize_svg
 from starvector.data.util import encode_image_base64
-from svgpathtools import svgstr2paths
-import os
-import json
-from copy import deepcopy
 from openai import OpenAI
 
 @register_validator

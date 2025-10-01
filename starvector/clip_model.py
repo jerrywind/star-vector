@@ -1,9 +1,6 @@
 # Adapted from LAVIS-Salesforce: LAVIS/lavis/models/clip_vit.py
 
 from collections import OrderedDict
-from itertools import repeat
-import collections.abc
-import math
 import torch
 import torch.nn.functional as F
 from torch import nn

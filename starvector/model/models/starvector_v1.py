@@ -1,5 +1,3 @@
-import torch
-import torch.nn as nn
 from starvector.model.models.starvector_base import StarVectorBase
 from transformers import AutoProcessor
 

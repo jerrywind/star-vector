@@ -16,9 +16,6 @@ from functools import partial
 from starvector.serve.constants import WORKER_HEART_BEAT_INTERVAL, CLIP_QUERY_LENGTH
 from starvector.serve.util import (build_logger, server_error_msg,
     pretty_print_semaphore)
-from starvector.serve.util import process_images, load_image_from_base64
-from threading import Thread
-from transformers import TextIteratorStreamer
 from openai import OpenAI
 
 GB = 1 << 30

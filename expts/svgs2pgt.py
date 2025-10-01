@@ -1,5 +1,4 @@
 import pandas as pd
-import pyarrow.parquet as pq
 import os
 
 

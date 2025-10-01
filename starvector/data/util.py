@@ -6,11 +6,8 @@ import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import re
 from svgpathtools import svgstr2paths
-import numpy as np
-from PIL import Image
 import cairosvg
 from io import BytesIO
-import numpy as np
 import textwrap  
 import os
 import base64
@@ -129,7 +126,7 @@ def process_and_rasterize_svg(svg_string, resolution=256, dpi = 128, scale=2):
             svg = clean_svg(svg_string)
             svgstr2paths(svg) # This will raise an exception if the svg is still not valid
             out_svg = svg
-        except Exception as e:
+        except Exception:
             out_svg = use_placeholder()
 
     raster_image = rasterize_svg(out_svg, resolution, dpi, scale)

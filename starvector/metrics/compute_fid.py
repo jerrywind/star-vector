@@ -1,9 +1,7 @@
 # Refer https://torchmetrics.readthedocs.io/en/stable/image/frechet_inception_distance.html
 # from torchmetrics.image.fid import FrechetInceptionDistance
-from PIL import Image
 from starvector.metrics.base_metric import BaseMetric
 import torch
-from torchvision import transforms
 import clip
 from torch.nn.functional import adaptive_avg_pool2d
 from starvector.metrics.inception import InceptionV3

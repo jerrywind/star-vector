@@ -1,5 +1,5 @@
 from PIL import Image
-from transformers import AutoModelForCausalLM, AutoTokenizer, AutoProcessor
+from transformers import AutoModelForCausalLM
 from starvector.data.util import process_and_rasterize_svg
 import torch
 

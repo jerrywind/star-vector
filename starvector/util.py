@@ -6,7 +6,6 @@ import time
 import subprocess
 import logging
 import shlex
-import os
 import shutil
 import fnmatch
 from huggingface_hub import login
@@ -153,7 +152,7 @@ def get_obj_from_str(string, reload=False):
     return getattr(importlib.import_module(module, package=None), cls)
 
 def instantiate_from_config(config):
-    if not "target" in config:
+    if "target" not in config:
         raise KeyError("No target in config")
     return get_obj_from_str(config["target"])(**config.get("params", dict()))
 
@@ -241,7 +240,7 @@ def copy_code(
     rsync_avialable = len(subprocess.run(['which', 'rsync'], capture_output=True, text=True).stdout) > 0
 
     if rsync_avialable: # TODO: validate this works
-        rsync_cmd_base = f"rsync -av -r -q --delete-before --exclude='.*' --exclude '__pycache__/'"
+        rsync_cmd_base = "rsync -av -r -q --delete-before --exclude='.*' --exclude '__pycache__/'"
         
         exclude_options = " ".join([f"--exclude='{filename}'" for filename in exclude_list])
 

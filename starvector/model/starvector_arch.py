@@ -2,9 +2,8 @@ from transformers import (
     PretrainedConfig,
     PreTrainedModel
 )
-from torch.nn import CrossEntropyLoss
 from transformers.models.gpt_bigcode.modeling_gpt_bigcode import CausalLMOutputWithCrossAttentions
-from typing import Optional, Tuple, Union
+from typing import Tuple, Union
 import torch
 
 from transformers.processing_utils import ProcessorMixin

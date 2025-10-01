@@ -194,7 +194,7 @@ def http_bot(state, model_selector, num_beams, temperature, len_penalty, top_p, 
                     yield (state, st[-1][1], state.to_gradio_svg_render()) + (disable_btn, disable_btn, disable_btn, enable_btn, enable_btn, disable_btn)
                     return
                 time.sleep(0.03)
-    except requests.exceptions.RequestException as e:
+    except requests.exceptions.RequestException:
         state.messages[-1][-1] = server_error_msg
         yield (state, None, None) + (disable_btn, disable_btn, disable_btn, enable_btn, enable_btn, disable_btn)
         return

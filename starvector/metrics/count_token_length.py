@@ -1,5 +1,3 @@
-import torch
-from torch.utils.data import DataLoader
 from starvector.metrics.base_metric import BaseMetric
 from tqdm import tqdm
 from starvector.metrics.util import AverageMeter

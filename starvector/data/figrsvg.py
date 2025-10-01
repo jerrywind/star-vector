@@ -1,7 +1,4 @@
-import os
 from starvector.data.base import SVGDatasetBase
-from transformers import AutoProcessor
-from starvector.data.util import ImageTrainProcessor
 
 class FigrSVGDataset(SVGDatasetBase):
     def __init__(self, dataset_name, split, im_size, num_samples=-1, **kwargs):

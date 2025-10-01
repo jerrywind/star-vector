@@ -7,8 +7,6 @@ from starvector.data.util import rasterize_svg
 from starvector.metrics.util import AverageMeter
 from starvector.metrics.compute_dino_score import DINOScoreCalculator
 from starvector.metrics.count_token_length import CountTokenLength
-import os
-from tqdm import tqdm
 
 class SVGMetrics: 
     def __init__(self, config=None):
